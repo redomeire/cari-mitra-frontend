@@ -1,13 +1,14 @@
 import { ChangeEventHandler } from "react";
 
 interface Props {
-    type?: "text" | "password" | "email" | "checkbox",
+    type?: "text" | "password" | "email" | "checkbox" | "file",
     className?: string,
     onChange?: ChangeEventHandler<HTMLInputElement>,
     placeholder?: string,
     defaultValue?: string | number,
     label?: string,
-    required?: boolean
+    required?: boolean,
+    accept?: string
 }
 
 const Input = ({
@@ -17,7 +18,8 @@ const Input = ({
     placeholder,
     defaultValue,
     label,
-    required
+    required,
+    accept
 }: Props) => {
     return (
         <div className={`form-control ${type !== "checkbox" && 'w-full'}`}>
@@ -27,7 +29,7 @@ const Input = ({
                     <span className="label-text">{label}</span>
                 </label>
             }
-            <input required={required} defaultValue={defaultValue} onChange={onChange} type={type} placeholder={placeholder} className={`${type !== "checkbox" && 'input input-bordered w-full'} ${className}`} />
+            <input accept={accept} required={required} defaultValue={defaultValue} onChange={onChange} type={type} placeholder={placeholder} className={`${type !== "checkbox" && 'input input-bordered w-full'} ${className}`} />
         </div>
     );
 }
