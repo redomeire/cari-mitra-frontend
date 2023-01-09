@@ -9,8 +9,8 @@ const PrivateRoute = () => {
         if (user?.role === "user")
             return <Outlet />
 
-        else if (user?.role === "admin")
-            return <Navigate to='/admin/dashboard' />
+        else if (user?.role === "partner")
+            return <Navigate to='/partner/dashboard' />
     }
 
     return <Navigate to='/auth/login' />

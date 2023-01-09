@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import React from 'react';
+import axios from 'axios';
 
 interface Props {
     isSidebarOpen: boolean,
@@ -10,11 +11,24 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }: Props) => {
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        localStorage.removeItem('Authorization')
+        let userData = JSON.parse(window.localStorage.getItem('Authorization') || "")
 
-        setTimeout(() => {
-            navigate('/admin/login')
-        }, 1500);
+        axios.post(`http://localhost:3333/api/partner/logout`, {}, {
+            headers: {
+                Authorization: `Bearer ${userData.token}`
+            }
+        })
+        .then(res => {
+            console.log(res);
+            window.localStorage.removeItem('Authorization')
+    
+            setTimeout(() => {
+                window.location.reload()
+            }, 2000);
+        })
+        .catch(err => {
+            alert(err.message)
+        })
     }
 
     const sidebarData = [

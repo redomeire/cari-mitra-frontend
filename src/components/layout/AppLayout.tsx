@@ -16,7 +16,7 @@ const AppLayout = (
     const [visible, setVisible] = React.useState(false);
 
     window.addEventListener('scroll', () => {
-        if (window.scrollY > 800)
+        if (window.scrollY > 500)
             setVisible(true);
 
         else setVisible(false);

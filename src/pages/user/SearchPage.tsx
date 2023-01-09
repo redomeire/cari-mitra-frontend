@@ -1,4 +1,4 @@
-import { Checkbox } from "react-daisyui";
+import { Badge, Checkbox } from "react-daisyui";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import Input from "../../components/Input/Input";
 import AppLayout from "../../components/layout/AppLayout";
@@ -13,7 +13,9 @@ const SearchPage = () => {
     const handleSearch = (e: { preventDefault: () => void }) => {
         e.preventDefault();
 
-        let userData = JSON.parse(window.localStorage.getItem('Authorization') || "")
+        let Storage = window.localStorage.getItem('Authorization')
+
+        let userData = Storage !== null ? JSON.parse(Storage || "") : ''
 
         axios.get(`http://localhost:3333/api/partner/search?q=${searchValue}`, {
             headers: {
@@ -41,9 +43,23 @@ const SearchPage = () => {
                     <div className="flex flex-wrap ">
                         {
                             results.length !== 0 ?
-                            results.map((result, index) => {
+                            results.map((result: { 
+                                id: number,
+                                nama: string, 
+                                alamat: string
+                                deskripsi: string,
+                                sop: string
+                             }, index) => {
                                 return(
-                                    <ResultCard isliked />
+                                    <ResultCard 
+                                    id={result.id}
+                                    nama={result.nama}
+                                    alamat={result.alamat}
+                                    deskripsi={result.deskripsi}
+                                    sop={result.sop}
+                                    isLiked
+                                    key={index}
+                                    />
                                 )
                             })
                             :
@@ -141,21 +157,24 @@ const FilterBar = () => {
 }
 
 interface Props {
+    id: number,
     nama: string,
     deskripsi: string,
     alamat: string,
-    sop: string
+    sop: string,
+    isLiked?: boolean
 }
 
-const ResultCard = ({ isliked } : { isliked?: boolean }) => {
-    const [liked, setLiked] = React.useState(isliked);
+const ResultCard = ({ id, nama, deskripsi, alamat, sop, isLiked }: Props) => {
+    const [liked, setLiked] = React.useState(isLiked);
     return (
-        <div className="border md:w-[47%] p-5 bg-white m-2 relative hover:shadow-lg transition duration-200 cursor-pointer">
+        <a href={`/partnerships/partner/${id}`} className="border md:w-[47%] p-5 bg-white m-2 relative hover:shadow-lg transition duration-200 cursor-pointer">
             <div className="flex items-center">
                 <img className="w-12 h-12" src="https://images.unsplash.com/photo-1547537352-ae90c682877e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80" alt="img" />
-                <Typography variant="subtitle2" className=" ml-2">O'ahu <span>Hawaiian Island</span></Typography>
+                <Typography variant="subtitle2" className=" ml-2">{nama}</Typography>
             </div>
-            <Typography variant="paragraph" className="my-5">O'ahu is home to the capital city on Honolulu. The island is known for its diverse landscape, including colorful beaches and lush rainforest</Typography>
+            <Typography variant="paragraph" className="my-5">{deskripsi?.substring(0, 150)}...</Typography>
+            <Badge variant="outline" color="primary">Free</Badge>
             <div>
                 <div className={`absolute top-5 right-5 `}>
                     {
@@ -165,10 +184,9 @@ const ResultCard = ({ isliked } : { isliked?: boolean }) => {
                         <AiOutlineHeart size={25}/>
                     }
                 </div>
-                {/* <Button className="mr-5">Show Details</Button>
-                <Button endIcon={<AiOutlineHeart size="20px"/>}>Favorites</Button> */}
+                {/* <Button className="mr-5">Show Details</Button> */}
             </div>
-        </div>
+        </a>
     )
 }
 

@@ -38,7 +38,7 @@ const ExplorePartner = () => {
                     <Typography className="md:text-[45px] leading-[60px] font-semibold">Make partnership with ease and no worry!</Typography>
                     <Input onChange={e => setSearchValue(e.target.value)} placeholder="search partner..." className="text-black" />
                     <Typography variant="body2" className="mt-5">People seeks partnership, just like you. Hence, we provide service that must be satisfy you</Typography>
-                    <Button className="mt-5 mx-auto rounded-none bg-purple-600 hover:bg-purple-500 border-none" endIcon={<BsArrowRight />}>
+                    <Button href="/partnerships/explore/search" className="mt-5 mx-auto rounded-none bg-purple-600 hover:bg-purple-500 border-none" endIcon={<BsArrowRight />}>
                         <Typography variant="body2" className="normal-case">Search partner</Typography>
                     </Button>
                 </form>

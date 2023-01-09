@@ -98,7 +98,7 @@ const Navbar = () => {
                 window.localStorage.getItem('Authorization') ?
                     <div className="flex items-center">
                         <MdLanguage className="text-purple-500 mr-10 w-6 h-6" />
-                        <a href="/login" className="mr-10">
+                        <a href="/partner/login" className="mr-10">
                             <Typography variant="body2" className="text-purple-500">For Partners</Typography>
                         </a>
                         <Button onClick={handleLogout} className="rounded-none normal-case bg-purple-600 hover:bg-purple-500 border-none" endIcon={<FiLogOut />}>
@@ -108,7 +108,7 @@ const Navbar = () => {
                     :
                     <div className="flex items-center">
                         <MdLanguage className="text-purple-500 mr-10 w-6 h-6" />
-                        <a href="/login" className="mr-10">
+                        <a href="/partner/login" className="mr-10">
                             <Typography variant="body2" className="text-purple-500">For Partners</Typography>
                         </a>
                         <Button onClick={() => { navigate('/auth/login') }} className="rounded-none normal-case bg-purple-600 hover:bg-purple-500 border-none" endIcon={<BsArrowRight />}>
