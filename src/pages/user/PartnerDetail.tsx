@@ -12,6 +12,7 @@ interface Props {
     alamat: string,
     nilai: number,
     deskripsi: string,
+    image_url: string,
     no_telp: string
 }
 
@@ -22,6 +23,7 @@ const PartnerDetail = () => {
         alamat: '',
         nilai: 0,
         deskripsi: '',
+        image_url: '',
         no_telp: ''
     });
 
@@ -48,7 +50,7 @@ const PartnerDetail = () => {
         <AppLayout>
             <div className="px-10 pt-10">
                 <div className="flex items-start">
-                    <img alt="happy" src="https://images.unsplash.com/photo-1499887142886-791eca5918cd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=580&q=80" className="w-24 h-24" />
+                    <div style={{ backgroundImage: `url('${initialState.image_url}')` }} className="bg-cover bg-center w-24 h-24" />
                     <div className="ml-5">
                         <Typography variant="subtitle1" className="text-purple-700">{initialState.nama}</Typography>
                         <Typography variant="body1" className="my-2">PT Atask Teknologi Indonesia</Typography>

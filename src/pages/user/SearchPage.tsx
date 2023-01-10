@@ -5,6 +5,7 @@ import AppLayout from "../../components/layout/AppLayout";
 import Typography from "../../components/Typography/Typography";
 import React from "react";
 import axios from "axios";
+import { motion, AnimatePresence } from "framer-motion";
 
 const SearchPage = () => {
     const [searchValue, setSearchValue] = React.useState('');
@@ -168,7 +169,12 @@ interface Props {
 const ResultCard = ({ id, nama, deskripsi, alamat, sop, isLiked }: Props) => {
     const [liked, setLiked] = React.useState(isLiked);
     return (
-        <a href={`/partnerships/partner/${id}`} className="border md:w-[47%] p-5 bg-white m-2 relative hover:shadow-lg transition duration-200 cursor-pointer">
+        // <AnimatePresence>
+        <motion.a
+        initial={{ y: 100, opacity: 0 }}
+        animate={{ y:0, opacity: 1 }}
+        transition={{ delay: 0,duration: 1.5, y: { type: 'spring', stiffness: 100 } }}
+        href={`/partnerships/partner/${id}`} className="border md:w-[47%] p-5 bg-white m-2 relative hover:shadow-lg cursor-pointer">
             <div className="flex items-center">
                 <img className="w-12 h-12" src="https://images.unsplash.com/photo-1547537352-ae90c682877e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80" alt="img" />
                 <Typography variant="subtitle2" className=" ml-2">{nama}</Typography>
@@ -186,7 +192,8 @@ const ResultCard = ({ id, nama, deskripsi, alamat, sop, isLiked }: Props) => {
                 </div>
                 {/* <Button className="mr-5">Show Details</Button> */}
             </div>
-        </a>
+        </motion.a>
+        // </AnimatePresence>
     )
 }
 
