@@ -10,10 +10,12 @@ interface Props {
     setWaktu: Function,
     setInstansi: Function,
     setDeskripsi: Function,
+    setStepNumber: Function,
     swiperRef: any
 }
 
 const Progress2 = ({ 
+    setStepNumber,
     setNamaAcara, 
     setJenisAcara,
     setTempat,
@@ -50,7 +52,10 @@ const Progress2 = ({
                 <Textarea onChange={e => setDeskripsi(e.target.value)} required placeholder="tulis deskripsi di sini" className="w-full" />
                 <div className="flex justify-end">
                     {/* <Button type="button" className="mt-5 w-fit mr-3" onClick={() => { swiperRef.current?.slidePrev() }}>Prev</Button> */}
-                    <Button type="button" className="mt-5 w-fit" onClick={() => { swiperRef.current?.slideNext() }}>Next</Button>
+                    <Button type="button" className="mt-5 w-fit" onClick={() => { 
+                        swiperRef.current?.slideNext()
+                        setStepNumber((prev: number) => prev + 1)
+                         }}>Next</Button>
                 </div>
             </div>
         </div>
