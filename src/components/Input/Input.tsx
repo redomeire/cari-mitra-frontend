@@ -1,7 +1,7 @@
 import { ChangeEventHandler } from "react";
 
 interface Props {
-    type?: "text" | "password" | "email" | "checkbox" | "file",
+    type?: "text" | "password" | "email" | "checkbox" | "file" | "date" | "time" | "datetime-local",
     className?: string,
     onChange?: ChangeEventHandler<HTMLInputElement>,
     placeholder?: string,

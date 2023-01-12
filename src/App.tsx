@@ -17,7 +17,8 @@ import SearchPage from "./pages/user/SearchPage";
 import PartnerDetail from "./pages/user/PartnerDetail";
 import Profile from "./pages/user/Profile";
 import EditProfile from "./pages/user/EditProfile";
-import PartnershipProcess from "./pages/PartnershipProcess";
+import ProgressStep from "./pages/user/PartnershipProcess/ProgressStep";
+import Riwayat from "./pages/user/Riwayat";
 
 function App() {
   return (
@@ -29,9 +30,10 @@ function App() {
           <Route path="/partnerships/explore" element={<ExplorePartner />} />
           <Route path="/partnerships/explore/search" element={<SearchPage />} />
           <Route path="/partnerships/partner/:id" element={<PartnerDetail />} />
-          <Route path="/partnerships/progress" element={<PartnershipProcess />} />
+          <Route path="/partnerships/progress/:id_partner" element={<ProgressStep />} />
           <Route path="/user/profile" element={<Profile />} />
           <Route path="/user/profile/edit" element={<EditProfile />} />
+          <Route path="/user/history" element={<Riwayat />} />
         </Route>
         <Route element={<AuthRoute />}>
           <Route path="/auth/login" element={<Login />} />

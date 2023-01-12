@@ -20,7 +20,7 @@ const navbarDatas = [
     },
     {
         name: 'Riwayat',
-        href: '/about'
+        href: '/user/history'
     },
     {
         name: 'Profil',

@@ -69,7 +69,7 @@ const PartnerDetail = () => {
                             <Typography className="ml-2 text-[15px] leading-[1] font-semibold">{initialState.nilai} / 5</Typography>
                             <Typography className="ml-2 text-[15px] leading-[1] text-gray-500">(110 ulasan)</Typography>
                         </div>
-                        <Button className="mt-8 normal-case rounded-none">
+                        <Button href={`/partnerships/progress/${id}`} className="mt-8 normal-case rounded-none">
                             <Typography variant="body2">Ajukan mitra</Typography>
                         </Button>
                     </div>
