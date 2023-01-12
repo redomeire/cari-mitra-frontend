@@ -1,7 +1,7 @@
 
 
 const formatDate = (date: Date) => {
-    return new Date(date).toLocaleDateString("en-US", {
+    return new Date(date).toLocaleDateString("Id", {
         weekday: 'long',
         year: 'numeric',
         month: 'long',

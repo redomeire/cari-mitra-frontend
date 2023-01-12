@@ -15,6 +15,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 
 const ProgressStep = () => {
+    let Storage = window.localStorage.getItem('Authorization')
+
+    let user = Storage !== null ? JSON.parse(Storage || "") : ''
+
     const navigate = useNavigate();
     const { id_partner } = useParams();
     const [stepNumber, setStepNumber] = React.useState(1);
@@ -44,10 +48,6 @@ const ProgressStep = () => {
 
     const handleSubmit = (e: { preventDefault: () => void }) => {
         e.preventDefault();
-        
-        let Storage = window.localStorage.getItem('Authorization')
-
-        let user = Storage !== null ? JSON.parse(Storage || "") : ''
 
         axios.post('http://localhost:3333/api/pengajuan/create', {
             nama_acara: namaAcara,
@@ -63,20 +63,20 @@ const ProgressStep = () => {
                 Authorization: `Bearer ${user.token}`
             }
         })
-        .then(res => {
-            console.log(res);
+            .then(res => {
+                console.log(res);
 
-            Swal.fire('Success', 'Sukses mengirim datamu. Partner akan segera menanggapi', 'success')
+                Swal.fire('Success', 'Sukses mengirim datamu. Partner akan segera menanggapi', 'success')
 
-            setTimeout(() => {
-                navigate('/partnership/riwayat')
-            }, 2000);
-        })
-        .catch(err => {
-            console.log(err);
+                setTimeout(() => {
+                    navigate('/partnership/riwayat')
+                }, 2000);
+            })
+            .catch(err => {
+                console.log(err);
 
-            Swal.fire('Error', err.message, 'error')
-        })
+                Swal.fire('Error', err.message, 'error')
+            })
     }
 
     return (
@@ -98,7 +98,7 @@ const ProgressStep = () => {
                     }
                 </Steps>
             </div>
-            <form className="mx-auto md:w-[70%]" onSubmit={handleSubmit}>
+            <div className="mx-auto md:w-[70%]">
                 <Swiper
                     slidesPerView={1}
                     spaceBetween={30}
@@ -109,24 +109,27 @@ const ProgressStep = () => {
                     onSlideChange={(res) => { setStepNumber(res.activeIndex + 1) }}
                 >
                     <SwiperSlide className="px-3">
-                        <Progress1 swiperRef={swiperRef} />
+                        <Progress1
+                            swiperRef={swiperRef} />
                     </SwiperSlide>
-                    <SwiperSlide className="px-3">
-                        <Progress2 
-                        setNamaAcara={setNamaAcara}
-                        setJenisAcara={setJenisAcara}
-                        setTempat={setTempat}
-                        setTanggal={setTanggal}
-                        setWaktu={setWaktu}
-                        setInstansi={setInstansi}
-                        setDeskripsi={setDeskripsiAcara}
-                        swiperRef={swiperRef} />
-                    </SwiperSlide>
-                    <SwiperSlide className="px-3">
-                        <Progress3 swiperRef={swiperRef} />
-                    </SwiperSlide>
+                    <form onSubmit={handleSubmit}>
+                        <SwiperSlide className="px-3">
+                            <Progress2
+                                setNamaAcara={setNamaAcara}
+                                setJenisAcara={setJenisAcara}
+                                setTempat={setTempat}
+                                setTanggal={setTanggal}
+                                setWaktu={setWaktu}
+                                setInstansi={setInstansi}
+                                setDeskripsi={setDeskripsiAcara}
+                                swiperRef={swiperRef} />
+                        </SwiperSlide>
+                        <SwiperSlide className="px-3">
+                            <Progress3 swiperRef={swiperRef} />
+                        </SwiperSlide>
+                    </form>
                 </Swiper>
-            </form>
+            </div>
         </AppLayout>
     );
 }

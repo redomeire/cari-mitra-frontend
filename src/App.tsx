@@ -16,7 +16,6 @@ import ExplorePartner from "./pages/user/ExplorePartner";
 import SearchPage from "./pages/user/SearchPage";
 import PartnerDetail from "./pages/user/PartnerDetail";
 import Profile from "./pages/user/Profile";
-import EditProfile from "./pages/user/EditProfile";
 import ProgressStep from "./pages/user/PartnershipProcess/ProgressStep";
 import Riwayat from "./pages/user/Riwayat";
 
@@ -32,7 +31,6 @@ function App() {
           <Route path="/partnerships/partner/:id" element={<PartnerDetail />} />
           <Route path="/partnerships/progress/:id_partner" element={<ProgressStep />} />
           <Route path="/user/profile" element={<Profile />} />
-          <Route path="/user/profile/edit" element={<EditProfile />} />
           <Route path="/user/history" element={<Riwayat />} />
         </Route>
         <Route element={<AuthRoute />}>

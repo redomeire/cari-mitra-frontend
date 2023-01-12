@@ -49,7 +49,7 @@ const Progress2 = ({
                 <Typography className="my-2">Deskripsi singkat acaramu</Typography>
                 <Textarea onChange={e => setDeskripsi(e.target.value)} required placeholder="tulis deskripsi di sini" className="w-full" />
                 <div className="flex justify-end">
-                    <Button type="button" className="mt-5 w-fit mr-3" onClick={() => { swiperRef.current?.slidePrev() }}>Prev</Button>
+                    {/* <Button type="button" className="mt-5 w-fit mr-3" onClick={() => { swiperRef.current?.slidePrev() }}>Prev</Button> */}
                     <Button type="button" className="mt-5 w-fit" onClick={() => { swiperRef.current?.slideNext() }}>Next</Button>
                 </div>
             </div>
