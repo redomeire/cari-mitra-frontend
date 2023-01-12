@@ -5,7 +5,7 @@ import AppLayout from "../../components/layout/AppLayout";
 import Typography from "../../components/Typography/Typography";
 import React from "react";
 import axios from "axios";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
 const SearchPage = () => {
     const [searchValue, setSearchValue] = React.useState('');
@@ -49,16 +49,17 @@ const SearchPage = () => {
                                 nama: string, 
                                 alamat: string
                                 deskripsi: string,
-                                sop: string
+                                sop: string,
+                                image_url: string
+                                disukai: number | null
                              }, index) => {
                                 return(
                                     <ResultCard 
                                     id={result.id}
                                     nama={result.nama}
-                                    alamat={result.alamat}
                                     deskripsi={result.deskripsi}
-                                    sop={result.sop}
-                                    isLiked
+                                    isLiked={result.disukai}
+                                    image_url={result.image_url}
                                     key={index}
                                     />
                                 )
@@ -161,13 +162,13 @@ interface Props {
     id: number,
     nama: string,
     deskripsi: string,
-    alamat: string,
-    sop: string,
-    isLiked?: boolean
+    isLiked?: number | null,
+    image_url?: string,
 }
 
-const ResultCard = ({ id, nama, deskripsi, alamat, sop, isLiked }: Props) => {
-    const [liked, setLiked] = React.useState(isLiked);
+const ResultCard = ({ id, nama, deskripsi, isLiked, image_url }: Props) => {
+    // const [liked, setLiked] = React.useState(isLiked);
+
     return (
         // <AnimatePresence>
         <motion.a
@@ -176,7 +177,7 @@ const ResultCard = ({ id, nama, deskripsi, alamat, sop, isLiked }: Props) => {
         transition={{ delay: 0,duration: 1.5, y: { type: 'spring', stiffness: 100 } }}
         href={`/partnerships/partner/${id}`} className="border md:w-[47%] p-5 bg-white m-2 relative hover:shadow-lg cursor-pointer">
             <div className="flex items-center">
-                <img className="w-12 h-12" src="https://images.unsplash.com/photo-1547537352-ae90c682877e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80" alt="img" />
+                <div className="w-12 h-12 bg-cover bg-center" style={{ backgroundImage: `url('${image_url}')`}} />
                 <Typography variant="subtitle2" className=" ml-2">{nama}</Typography>
             </div>
             <Typography variant="paragraph" className="my-5">{deskripsi?.substring(0, 150)}...</Typography>
@@ -184,10 +185,12 @@ const ResultCard = ({ id, nama, deskripsi, alamat, sop, isLiked }: Props) => {
             <div>
                 <div className={`absolute top-5 right-5 `}>
                     {
-                        liked ? 
+                        isLiked === 1 ? 
                         <AiFillHeart size={25} className="fill-red-400"/>
                         :
+                        isLiked === null ?
                         <AiOutlineHeart size={25}/>
+                        : ''
                     }
                 </div>
                 {/* <Button className="mr-5">Show Details</Button> */}

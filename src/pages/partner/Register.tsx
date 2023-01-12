@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { ChangeEvent } from "react";
-import { Button } from "react-daisyui";
+import { Button, FileInput, Textarea } from "react-daisyui";
 import Alert from "../../components/Alert/Alert";
 // import Button from "../components/Button/Button";
 import Input from "../../components/Input/Input";
@@ -106,13 +106,14 @@ const Register = () => {
                     <Input label="Nama*" placeholder="mail@carimitra.com" className="mb-5" onChange={e => setName(e.target.value)} />
                     <Input label="Email*" placeholder="mail@carimitra.com" className="mb-5" onChange={e => setEmail(e.target.value)} />
                     <Input className="mb-5" label="Password*" type="password" placeholder="password goes here" onChange={e => setPassword(e.target.value)} />
-                    <Input className="mb-5" label="Deskripsi*" type="text" placeholder="deskripsi goes here" onChange={e => setDeskripsi(e.target.value)} />
+                    <Typography variant="paragraph" className="mb-2">Deskripsi*</Typography>
+                    <Textarea className="mb-5 w-full" aria-label="Deskripsi*" placeholder="deskripsi goes here" onChange={e => setDeskripsi(e.target.value)}/>
                     <Input className="mb-5" label="Sop*" type="text" placeholder="sop anda" onChange={e => setSop(e.target.value)} />
                     <Input className="mb-5" label="Dukungan*" type="text" placeholder="fasilitas yang anda tawarkan" onChange={e => setDukungan(e.target.value)} />
                     <Input className="mb-5" label="No telp*" type="text" placeholder="nomor telepon perusahaan" onChange={e => setNoTelp(e.target.value)} />
                     <Input className="mb-5" label="alamat*" type="text" placeholder="alamat perusahaan" onChange={e => setAlamat(e.target.value)} />
                     <div className="w-20 h-20 mt-10 bg-cover bg-center" style={{ backgroundImage: `url("${imageUrl}")` }}/>
-                    <Input accept="image/*" required label="gambar*" type="file" placeholder="gambar anda" onChange={handleChangeFile} />
+                    <FileInput className="w-full mt-2" accept="image/*" required aria-label="gambar*" placeholder="gambar anda" onChange={handleChangeFile} color="primary"/>
                     
                     <Button className="w-full mt-5 rounded-full bg-purple-500 border-none normal-case">Register</Button>
                     <Typography className="text-[14px] mt-4">Already have accounts? <a href="/partner/login"><span className="font-semibold">Login</span></a></Typography>

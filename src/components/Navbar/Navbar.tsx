@@ -24,7 +24,7 @@ const navbarDatas = [
     },
     {
         name: 'Profil',
-        href: '/about'
+        href: '/user/profile'
     },
 ]
 

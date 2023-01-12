@@ -31,7 +31,7 @@ const AppLayout = (
 
     return (
         <div className="font-sora relative">
-            <motion.div className="progress-bar z-50 fixed top-0 left-0 right-0 h-[5px] origin-left bg-purple-400" style={{ scaleX }}/>
+            <motion.div className="progress-bar z-50 fixed top-0 left-0 right-0 h-[3px] origin-left bg-purple-400" style={{ scaleX }}/>
             <Navbar />
             <div className="pt-[90px] min-h-screen">{children}</div>
             {window.location.pathname !== '/partnerships/explore/search' && <Footer />}
