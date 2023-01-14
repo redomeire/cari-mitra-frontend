@@ -18,6 +18,14 @@ import PartnerDetail from "./pages/user/PartnerDetail";
 import Profile from "./pages/user/Profile";
 import ProgressStep from "./pages/user/PartnershipProcess/ProgressStep";
 import Riwayat from "./pages/user/Riwayat";
+import PengajuanDetail from "./pages/user/Pengajuan/PengajuanDetail";
+
+// socket
+import io from "socket.io-client";
+
+// change host when deploying to production
+const host = 'http://localhost:3333';
+const socket = io(host)
 
 function App() {
   return (
@@ -31,7 +39,9 @@ function App() {
           <Route path="/partnerships/partner/:id" element={<PartnerDetail />} />
           <Route path="/partnerships/progress/:id_partner" element={<ProgressStep />} />
           <Route path="/user/profile" element={<Profile />} />
+
           <Route path="/user/history" element={<Riwayat />} />
+          <Route path="/user/pengajuan/:id/details" element={<PengajuanDetail socket={socket} />} />
         </Route>
         <Route element={<AuthRoute />}>
           <Route path="/auth/login" element={<Login />} />

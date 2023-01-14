@@ -53,6 +53,16 @@ const Login = () => {
             })
     }
 
+    const handleGoogle = () => {
+        axios.get('http://localhost:3333/api/auth/google/redirect')
+        .then(res => {
+            console.log(res);
+        })
+        .catch(err => {
+            console.error(err);
+        })
+    }
+
     return (
         // <AppLayout>
         <div className="flex items-stretch min-h-screen font-sora">
