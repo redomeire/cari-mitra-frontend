@@ -22,6 +22,7 @@ import PengajuanDetail from "./pages/user/Pengajuan/PengajuanDetail";
 
 // socket
 import io from "socket.io-client";
+import Partnership from "./pages/partner/Partnership";
 
 // change host when deploying to production
 const host = 'http://localhost:3333';
@@ -51,6 +52,7 @@ function App() {
         </Route>
         <Route element={<AdminRoute/>}>
           <Route path="/partner/dashboard" element={<Dashboard/>}/>
+          <Route path="/partner/partnership/:id" element={<Partnership socket={socket}/>}/>
           <Route path="/partner/user/:id" element={<UserDetail/>}/>
         </Route>
       </Routes>
