@@ -6,31 +6,39 @@ import Typography from "../Typography/Typography";
 import { AnimatePresence, motion } from "framer-motion";
 import axios from "axios";
 import EmojiPicker from "emoji-picker-react";
+import { Socket } from "socket.io-client";
 
 const ChatCard = ({
+    setIsTyping,
+    isTyping,
     id,
     setIsChatroomExist,
     messages,
     partner,
-    setMessages
+    setMessages,
+    socket
 }: {
+    setIsTyping: Function,
+    isTyping: boolean,
     id: string | undefined,
     setIsChatroomExist: Function,
-    partner: { 
+    partner: {
         nama: string,
         image_url: string
-     },
+    },
     messages: {
         id_chat?: number,
         text_message: string,
         sent_by_partner: boolean,
         created_at: Date
     }[],
-    setMessages: Function
+    setMessages: Function,
+    socket: Socket
 }) => {
     const [message, setMessage] = React.useState('');
     const [emojiVisible, setEmojiVisible] = React.useState(false);
     const lastMessageRef = React.useRef<any>(null);
+    const [isPartner, setIsPartner] = React.useState(false);
 
     let userData = JSON.parse(window.localStorage.getItem('Authorization') || "")
 
@@ -57,9 +65,21 @@ const ChatCard = ({
     }
 
     React.useEffect(() => {
+        socket.on(`user:typing:${id}`, (data) => {
+            // if(data.isPartner) {
+                setIsPartner(data.isPartner)
+                setIsTyping(true)
+                setTimeout(() => {
+                    setIsTyping(false)
+                }, 3000);
+            // }
+        })
+    }, [id, setIsTyping, socket])
+
+    React.useEffect(() => {
         lastMessageRef.current.scrollTop = lastMessageRef.current.scrollHeight
         console.log(lastMessageRef)
-    }, [messages])
+    }, [messages, isTyping])
 
     return (
         <>
@@ -72,35 +92,55 @@ const ChatCard = ({
                         <div>
                             {
                                 messages.length > 0 ?
-                                messages.map((item, index) => {
-                                    return (
-                                        <motion.div
-                                            key={index}
-                                            initial={{ y: 50, opacity: 0 }}
-                                            animate={{ y: 0, opacity: 1 }}
-                                            transition={{ duration: 0.5, ease: 'easeInOut' }}
-                                            className='my-2'
-                                        >
-                                            <ChatBubble end={item.sent_by_partner ? false : true} key={index}>
-                                                <ChatBubble.Avatar src={item.sent_by_partner ? partner.image_url : 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1780&q=80'} />
-                                                <ChatBubble.Message color="primary">{item.text_message}</ChatBubble.Message>
-                                                <ChatBubble.Footer>
-                                                    <ChatBubble.Time className="text-gray-900 opacity-70">{formatDate(item.created_at)}</ChatBubble.Time>
-                                                </ChatBubble.Footer>
-                                            </ChatBubble>
-                                        </motion.div>
-                                    )
-                                })
-                                :
-                                <div className="w-full h-[300px] flex items-center justify-center flex-col">
-                                    <img src="/images/search/not_found.png" alt="notfound" className="md:w-[150px]"/>
-                                    <Typography variant="body1" className="text-gray-500">Baru pertama kali chat?</Typography>
-                                    <Typography variant="paragraph" className="text-gray-500">Mulai sesi chatmu sekarang</Typography>
-                                </div>
+                                    messages.map((item, index) => {
+                                        return (
+                                            <motion.div
+                                                key={index}
+                                                initial={{ y: 50, opacity: 0 }}
+                                                animate={{ y: 0, opacity: 1 }}
+                                                transition={{ duration: 0.5, ease: 'easeInOut' }}
+                                                className='my-2'
+                                            >
+                                                <ChatBubble end={item.sent_by_partner ? false : true} key={index}>
+                                                    <ChatBubble.Avatar src={item.sent_by_partner ? partner.image_url : 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1780&q=80'} />
+                                                    <ChatBubble.Message color="primary">{item.text_message}</ChatBubble.Message>
+                                                    <ChatBubble.Footer>
+                                                        <ChatBubble.Time className="text-gray-900 opacity-70">{formatDate(item.created_at)}</ChatBubble.Time>
+                                                    </ChatBubble.Footer>
+                                                </ChatBubble>
+                                            </motion.div>
+                                        )
+                                    })
+                                    :
+                                    <div className="w-full h-[300px] flex items-center justify-center flex-col">
+                                        <img src="/images/search/not_found.png" alt="notfound" className="md:w-[150px]" />
+                                        <Typography variant="body1" className="text-gray-500">Baru pertama kali chat?</Typography>
+                                        <Typography variant="paragraph" className="text-gray-500">Mulai sesi chatmu sekarang</Typography>
+                                    </div>
+                            }
+                            {
+                                isTyping &&
+                                <motion.div
+                                initial={{ y: 0 }}
+                                animate={{ y: -20 }}
+                                transition={{ duration: 0.3, ease: 'easeInOut' }}
+                                className={`flex ${ isPartner ? 'justify-start' : 'justify-end'} p-2 rounded-full`}>
+                                    <div className="typing">
+                                        <div className="dot"></div>
+                                        <div className="dot"></div>
+                                        <div className="dot"></div>
+                                    </div>
+                                </motion.div>
                             }
                         </div>
                         <form onSubmit={handleSubmit} className="text-section absolute bottom-0 right-0 left-0 flex items-center bg-white p-3 border">
-                            <Input required value={message} placeholder="enter text here" className="w-full mr-2" onChange={e => setMessage(e.target.value)} />
+                            <Input required value={message} placeholder="enter text here" className="w-full mr-2" onChange={e => {
+                                setMessage(e.target.value)
+                            }}
+                                onKeyDown={() => {
+                                socket.emit(`user:typing`, { isTyping: true, id: id, isPartner: false })
+                                }}
+                            />
                             <Button onClick={() => setEmojiVisible(!emojiVisible)} className="mb-0 bg-purple-600 border-none hover:bg-purple-500" type="button">😁</Button>
                         </form>
                         <AnimatePresence>

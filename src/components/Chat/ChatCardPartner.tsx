@@ -6,14 +6,21 @@ import EmojiPicker from "emoji-picker-react";
 import { IoClose } from "react-icons/io5";
 import React from "react"
 import axios from "axios";
+import { Socket } from "socket.io-client";
 
 const ChatCardPartner = ({
+    setIsTyping,
+    isTyping,
+    socket,
     id,
     setIsChatroomExist,
     messages,
     user,
     setMessages
 }: {
+    setIsTyping: Function,
+    isTyping: boolean,
+    socket: Socket,
     id: string | undefined,
     setIsChatroomExist: Function,
     user: { 
@@ -24,13 +31,14 @@ const ChatCardPartner = ({
         id_chat?: number,
         text_message: string,
         sent_by_partner: boolean,
-        created_at: Date
+        created_at: Date,
     }[],
     setMessages: Function
 }) => {
     const [message, setMessage] = React.useState('');
     const [emojiVisible, setEmojiVisible] = React.useState(false);
     const lastMessageRef = React.useRef<any>(null);
+    const [isPartner, setIsPartner] = React.useState(false);
 
     let userData = JSON.parse(window.localStorage.getItem('Authorization') || "")
 
@@ -57,9 +65,21 @@ const ChatCardPartner = ({
     }
 
     React.useEffect(() => {
+        socket.on(`user:typing:${id}`, (data) => {
+            // if(data.isPartner) {
+                setIsPartner(data.isPartner)
+                setIsTyping(true)
+                setTimeout(() => {
+                    setIsTyping(false)
+                }, 3000);
+            // }
+        })
+    }, [id, setIsTyping, socket])
+
+    React.useEffect(() => {
         lastMessageRef.current.scrollTop = lastMessageRef.current.scrollHeight
         console.log(lastMessageRef)
-    }, [messages])
+    }, [messages, isTyping])
 
     return (
         <>
@@ -98,9 +118,27 @@ const ChatCardPartner = ({
                                         <Typography variant="paragraph" className="text-gray-500">Mulai sesi chatmu sekarang</Typography>
                                     </div>
                             }
+                            {
+                                isTyping &&
+                                <motion.div
+                                initial={{ y: 0 }}
+                                animate={{ y: -20 }}
+                                transition={{ duration: 0.3, ease: 'easeInOut' }}
+                                className={`flex ${ !isPartner ? 'justify-start' : 'justify-end'} p-2 rounded-full`}>
+                                    <div className="typing">
+                                        <div className="dot"></div>
+                                        <div className="dot"></div>
+                                        <div className="dot"></div>
+                                    </div>
+                                </motion.div>
+                            }
                         </div>
                         <form onSubmit={handleSubmit} className="text-section absolute bottom-0 right-0 left-0 flex items-center bg-white p-3 border">
-                            <Input required value={message} placeholder="enter text here" className="w-full mr-2" onChange={e => setMessage(e.target.value)} />
+                            <Input required value={message} placeholder="enter text here" className="w-full mr-2" onChange={e => setMessage(e.target.value)}
+                            onKeyDown={() => {
+                                socket.emit(`user:typing`, { isTyping: true, id: id, isPartner: true })
+                                }}
+                            />
                             <Button onClick={() => setEmojiVisible(!emojiVisible)} className="mb-0 bg-purple-600 border-none hover:bg-purple-500" type="button">😁</Button>
                         </form>
                         <AnimatePresence>

@@ -5,7 +5,9 @@ const formatDate = (date: Date) => {
         weekday: 'long',
         year: 'numeric',
         month: 'long',
-        day: 'numeric'
+        day: 'numeric',
+        hour: '2-digit',
+        minute: 'numeric'
     })
 };
 

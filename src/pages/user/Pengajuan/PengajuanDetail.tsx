@@ -12,10 +12,12 @@ import { formatDate } from "../../../utils/dateFormatter";
 const PengajuanDetail = ({ socket }: { socket: Socket }) => {
     const { id } = useParams();
     const [isChatroomExist, setIsChatroomExist] = React.useState(true);
+    const [isTyping, setIsTyping] = React.useState(false);
     const [data, setData] = React.useState<
         {
             deskripsi_acara: string,
             id: number,
+            id_chat: string,
             id_partner: number,
             id_user: number,
             image_url: string,
@@ -27,6 +29,7 @@ const PengajuanDetail = ({ socket }: { socket: Socket }) => {
             {
                 deskripsi_acara: '',
                 id: 0,
+                id_chat: '',
                 id_partner: 0,
                 id_user: 0,
                 image_url: '',
@@ -66,8 +69,14 @@ const PengajuanDetail = ({ socket }: { socket: Socket }) => {
             setIsChatroomExist(true)
             console.log('chat room created : ' + data)
         })
-        socket.on(`client:chat:${id}`, (data) => setMessages((prev) => [...prev, data]))
-    }, [socket, id])
+        socket.on(`client:chat:${data.id_chat}`, (data) => setMessages((prev) => [...prev, data]))
+
+        return () => {
+            socket.off(`user:typing:${data.id_chat}`, () => {
+                setIsTyping(false)
+            })
+        }
+    }, [socket, id, data.id_chat])
 
     const createChatroom = () => {
         let userData = JSON.parse(window.localStorage.getItem('Authorization') || "")
@@ -147,6 +156,9 @@ const PengajuanDetail = ({ socket }: { socket: Socket }) => {
                 <div className="md:w-[35%] relative">
                     {isChatroomExist ?
                         <ChatCard
+                            setIsTyping={setIsTyping}
+                            isTyping={isTyping}
+                            socket={socket}
                             partner={{ 
                                 nama: data.nama,
                                 image_url: data.image_url
@@ -154,7 +166,7 @@ const PengajuanDetail = ({ socket }: { socket: Socket }) => {
                             setIsChatroomExist={setIsChatroomExist}
                             messages={messages}
                             setMessages={setMessages}
-                            id={id} />
+                            id={data.id_chat} />
                         :
                         <Button onClick={createChatroom}>Start chatting</Button>
                     }
