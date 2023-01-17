@@ -82,7 +82,7 @@ const ChatCardPartner = ({
                                                 className='my-2'
                                             >
                                                 <ChatBubble end={item.sent_by_partner ? true : false} key={index}>
-                                                    <ChatBubble.Avatar src={item.sent_by_partner ? user.image_url : 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1780&q=80'} />
+                                                    <ChatBubble.Avatar src={item.sent_by_partner ? userData.image_url : 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1780&q=80'} />
                                                     <ChatBubble.Message color="primary">{item.text_message}</ChatBubble.Message>
                                                     <ChatBubble.Footer>
                                                         <ChatBubble.Time className="text-gray-900 opacity-70">{formatDate(item.created_at)}</ChatBubble.Time>

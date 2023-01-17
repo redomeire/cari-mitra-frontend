@@ -62,12 +62,12 @@ const PengajuanDetail = ({ socket }: { socket: Socket }) => {
     }, [id, userData.token])
 
     React.useEffect(() => {
-        socket.on('client:room', (data) => {
+        socket.on(`client:room:${id}`, (data) => {
             setIsChatroomExist(true)
             console.log('chat room created : ' + data)
         })
-        socket.on('client:chat', (data) => setMessages((prev) => [...prev, data]))
-    }, [socket])
+        socket.on(`client:chat:${id}`, (data) => setMessages((prev) => [...prev, data]))
+    }, [socket, id])
 
     const createChatroom = () => {
         let userData = JSON.parse(window.localStorage.getItem('Authorization') || "")
