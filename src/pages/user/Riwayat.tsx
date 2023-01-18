@@ -14,7 +14,7 @@ const Riwayat = () => {
 
         let user = Storage !== null ? JSON.parse(Storage || "") : ''
 
-        axios.get('http://localhost:3333/api/pengajuan/user/get/all', {
+        axios.get('http://localhost:3333/api/pengajuan/user/get/all?role=user', {
             headers: {
                 Authorization: `Bearer ${user.token}`
             }

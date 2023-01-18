@@ -19,6 +19,8 @@ import Profile from "./pages/user/Profile";
 import ProgressStep from "./pages/user/PartnershipProcess/ProgressStep";
 import Riwayat from "./pages/user/Riwayat";
 import PengajuanDetail from "./pages/user/Pengajuan/PengajuanDetail";
+import PengajuanDetailPartner from "./pages/admin/PengajuanDetail"
+import Pengajuans from "./pages/admin/Pengajuans";
 
 // socket
 import io from "socket.io-client";
@@ -53,6 +55,8 @@ function App() {
         <Route element={<AdminRoute/>}>
           <Route path="/partner/dashboard" element={<Dashboard/>}/>
           <Route path="/partner/partnership/:id" element={<Partnership socket={socket}/>}/>
+          <Route path="/partner/pengajuans" element={<Pengajuans/>}/>
+          <Route path="/partner/pengajuan/:id" element={<PengajuanDetailPartner />}/>
           <Route path="/partner/user/:id" element={<UserDetail/>}/>
         </Route>
       </Routes>

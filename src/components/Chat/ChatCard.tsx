@@ -66,6 +66,7 @@ const ChatCard = ({
 
     React.useEffect(() => {
         socket.on(`user:typing:${id}`, (data) => {
+            console.log(id)
             // if(data.isPartner) {
                 setIsPartner(data.isPartner)
                 setIsTyping(true)
@@ -78,7 +79,7 @@ const ChatCard = ({
 
     React.useEffect(() => {
         lastMessageRef.current.scrollTop = lastMessageRef.current.scrollHeight
-        console.log(lastMessageRef)
+        // console.log(lastMessageRef)
     }, [messages, isTyping])
 
     return (

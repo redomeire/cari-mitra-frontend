@@ -71,11 +71,11 @@ const PengajuanDetail = ({ socket }: { socket: Socket }) => {
         })
         socket.on(`client:chat:${data.id_chat}`, (data) => setMessages((prev) => [...prev, data]))
 
-        return () => {
-            socket.off(`user:typing:${data.id_chat}`, () => {
-                setIsTyping(false)
-            })
-        }
+        // return () => {
+        //     socket.off(`user:typing:${data.id_chat}`, () => {
+        //         setIsTyping(false)
+        //     })
+        // }
     }, [socket, id, data.id_chat])
 
     const createChatroom = () => {

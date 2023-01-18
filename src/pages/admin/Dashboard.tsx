@@ -1,131 +1,169 @@
-import { Button, Table } from "react-daisyui";
+import { Avatar, Stats } from "react-daisyui";
 import AdminLayout from "../../components/layout/AdminLayout";
 import Typography from "../../components/Typography/Typography";
-import { AiFillDelete, AiFillEdit } from 'react-icons/ai';
 import axios from "axios";
 import React from "react";
-import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend,
+    ArcElement
+} from 'chart.js';
+import { Bar } from 'react-chartjs-2';
+
+ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend,
+    ArcElement
+);
+
+export const options = {
+    responsive: true,
+    plugins: {
+        legend: {
+            position: 'top' as const,
+        },
+        title: {
+            display: true,
+            text: 'Chart.js Bar Chart',
+        },
+    },
+};
+
+const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July']
+
+export const data = {
+    labels,
+    datasets: [
+        {
+            label: 'Dataset 1',
+            data: labels.map(() => Math.random()),
+            backgroundColor: 'rgba(244, 114, 182, 0.5)',
+        },
+        {
+            label: 'Dataset 2',
+            data: labels.map(() => Math.random()),
+            backgroundColor: 'rgba(126, 34, 206, 0.5)',
+        },
+    ],
+};
 
 const Dashboard = () => {
-    const [users, setUsers] = React.useState<Array<{
-        id: number,
-        username: string
-        email: string,
-        role: string
-    }>>([]);
-    const navigate = useNavigate()
+    const [partner, setPartner] = React.useState({ total: 0, total_pengajuan_berhasil: 0 });
 
-    const getUsers = () => {
-        let userData = JSON.parse(window.localStorage.getItem('Authorization') || "")
+    let userData = JSON.parse(window.localStorage.getItem('Authorization') || "")
 
-        axios.get('http://127.0.0.1:3333/users', {
+    React.useEffect(() => {
+        axios.get('http://localhost:3333/api/partner/get?role=partner', {
             headers: {
-                Authorization: `Bearer ${userData.token.token}`
+                Authorization: `Bearer ${userData.token}`
             }
         })
             .then(res => {
                 console.log(res)
-                setUsers(res.data.data);
+                setPartner(res.data)
             })
             .catch(err => {
                 console.log(err);
             })
-    }
-
-    React.useEffect(() => {
-        getUsers()
-    }, [])
-
-    const deleteUser = (id: number) => {
-        let userData = JSON.parse(window.localStorage.getItem('Authorization') || "")
-
-        axios.delete('http://127.0.0.1:3333/delete', {
-            headers: {
-                Authorization: `Bearer ${userData.token.token}`
-            },
-            data: {
-                id: id
-            }
-        }
-        )
-            .then(res => {
-                console.log(res)
-                Swal.fire(
-                    'Success',
-                    'Success delete user',
-                    'success'
-                )
-
-                setTimeout(() => {
-                    window.location.reload()
-                }, 2000);
-            })
-            .catch(err => {
-                console.log(err);
-
-                Swal.fire(
-                    'Failed',
-                    err.message,
-                    'error'
-                )
-            })
-    }
+    }, [userData.token])
 
     return (
         <AdminLayout pageName="Dashboard">
-            <div className="flex md:items-center justify-between md:flex-row flex-col w-full">
-                <div className="md:w-[48%] min-h-[200px] bg-white p-4 rounded-2xl transition duration border-b-8 border-b-red-500">
-                    <div className="bg-red-200 w-fit mx-auto p-2 text-red-600 rounded-lg">
-                        <Typography variant="body1" className="text-center">Total User</Typography>
-                    </div>
-                    <div className="flex items-center justify-center mt-10 flex-col">
-                        <Typography variant="subtitle1">50+</Typography>
-                        <Button className="mt-5">Visit</Button>
-                    </div>
-                </div>
-                <div className="md:w-[48%] min-h-[200px] bg-white p-4 rounded-2xl transition duration border-b-8 border-b-green-500 md:mt-0 mt-5">
-                    <div className="bg-green-200 w-fit mx-auto p-2 text-green-600 rounded-lg">
-                        <Typography variant="body1" className="text-center">Total Todos</Typography>
-                    </div>
-                    <div className="flex items-center justify-center mt-10 flex-col">
-                        <Typography variant="subtitle1">500+</Typography>
-                        <Button className="mt-5">Visit</Button>
-                    </div>
-                </div>
-            </div>
-            <div className='overflow-x-auto'>
-                <Typography variant="title" className="mb-5 mt-20">Users</Typography>
-                <Table className="w-full" >
-                    <Table.Head>
-                        <span />
-                        <span>Name</span>
-                        <span>Email</span>
-                        <span>Role</span>
-                        <div className="w-full text-right">
-                            <span>Action</span>
-                        </div>
-                    </Table.Head>
+            <Stats className="shadow w-full font-sans lg:stats-horizontal stats-vertical">
+                <Stats.Stat>
+                    <Stats.Stat.Item variant="figure" className="text-primary">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            className="inline-block w-8 h-8 stroke-current"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                            ></path>
+                        </svg>
+                    </Stats.Stat.Item>
+                    <Stats.Stat.Item variant="title">Total Pengajuan</Stats.Stat.Item>
+                    <Stats.Stat.Item variant="value" className="text-primary">
+                        {partner.total}
+                    </Stats.Stat.Item>
+                    <Stats.Stat.Item variant="desc">21% more than last month</Stats.Stat.Item>
+                </Stats.Stat>
 
-                    <Table.Body>
-                        {
-                            users.map((user, index) => {
-                                return (
-                                    <Table.Row key={index}>
-                                        <span>{index + 1}</span>
-                                        <span>{user.username}</span>
-                                        <span>{user.email}</span>
-                                        <span>{user.role}</span>
-                                        <div className="flex items-center justify-end">
-                                            <Button onClick={() => navigate(`/admin/user/${user.id}`)} endIcon={<AiFillEdit />}>Edit</Button>
-                                            <Button onClick={() => deleteUser(user.id)} endIcon={<AiFillDelete />} className="ml-3">Delete</Button>
-                                        </div>
-                                    </Table.Row>
-                                )
-                            })
-                        }
-                    </Table.Body>
-                </Table>
+                <Stats.Stat>
+                    <Stats.Stat.Item variant="figure" className="text-secondary">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            className="inline-block w-8 h-8 stroke-current"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M13 10V3L4 14h7v7l9-11h-7z"
+                            ></path>
+                        </svg>
+                    </Stats.Stat.Item>
+                    <Stats.Stat.Item variant="title">Pengajuan berhasil</Stats.Stat.Item>
+                    <Stats.Stat.Item variant="value" className="text-secondary">
+                        {partner.total_pengajuan_berhasil}
+                    </Stats.Stat.Item>
+                    <Stats.Stat.Item variant="desc">21% more than last month</Stats.Stat.Item>
+                </Stats.Stat>
+
+                <Stats.Stat>
+                    <Stats.Stat.Item variant="figure" className="text-primary">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            className="inline-block w-8 h-8 stroke-current"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                            ></path>
+                        </svg>
+                    </Stats.Stat.Item>
+                    <Stats.Stat.Item variant="figure" className=" text-secondary">
+                        <Avatar
+                            size="sm"
+                            online={true}
+                            src={userData.image_url}
+                            shape="circle"
+                        ></Avatar>
+                    </Stats.Stat.Item>
+                    <Stats.Stat.Item variant="value">86%</Stats.Stat.Item>
+                    <Stats.Stat.Item variant="title">Tasks done</Stats.Stat.Item>
+                    <Stats.Stat.Item variant="desc" className="text-secondary">
+                        31 tasks remaining
+                    </Stats.Stat.Item>
+                </Stats.Stat>
+            </Stats>
+
+            <div className="flex md:items-center justify-between md:flex-row flex-col w-full">
+            </div>
+            <div className='overflow-x-auto bg-white p-5 mt-10 rounded-xl shadow'>
+                <Typography variant="body1" className="mb-5">Users</Typography>
+                <div className="flex items-center">
+                    <Bar options={options} data={data} />
+                </div>
             </div>
         </AdminLayout>
     );
