@@ -1,10 +1,11 @@
-import { Button, Table } from "react-daisyui";
+import { Badge, Button, Table } from "react-daisyui";
 import { AiFillEdit } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import AdminLayout from "../../components/layout/AdminLayout";
 
 import React from "react";
 import axios from "axios";
+import Typography from "../../components/Typography/Typography";
 
 const Users = () => {
     const [pengajuans, setPengajuans] = React.useState<Array<{
@@ -13,7 +14,7 @@ const Users = () => {
         email: string,
         role: string,
         nama_acara: string,
-        status: 'berlangsung' | 'berhasil' | 'gagal',
+        status: 'berlangsung' | 'berhasil' | 'gagal' | 'selesai',
         nama_depan: string,
         nama_belakang: string
     }>>([]);
@@ -36,9 +37,10 @@ const Users = () => {
             })
     }, [userData.token])
 
-    return ( 
+    return (
         <AdminLayout>
             <div className="overflow-x-auto bg-white p-5 mt-10 rounded-xl shadow">
+                <Typography variant="subtitle2" className="mb-10">Pengajuan anda</Typography>
                 <Table className="w-full" >
                     <Table.Head>
                         <span />
@@ -58,7 +60,13 @@ const Users = () => {
                                     <Table.Row key={index}>
                                         <span>{index + 1}</span>
                                         <span>{user.nama_acara}</span>
-                                        <span className={user.status === 'berlangsung' ? 'text-green-500' : 'text-red-500'}>{user.status}</span>
+                                        <Badge variant="outline" color={
+                                            user.status === "berhasil" ? 'info'
+                                                : user.status === "berlangsung" ? 'primary'
+                                                    : user.status === "selesai" ? 'success'
+                                                        : user.status === "gagal" ? 'error'
+                                                            : 'primary'
+                                        }>{user.status}</Badge>
                                         <span>{user.nama_depan + " " + user.nama_belakang}</span>
                                         <div className="flex items-center justify-end">
                                             <Button onClick={() => navigate(`/partner/partnership/${user.id_pengajuan}`)} endIcon={<AiFillEdit />}>Detail</Button>
@@ -71,7 +79,7 @@ const Users = () => {
                 </Table>
             </div>
         </AdminLayout>
-     );
+    );
 }
- 
+
 export default Users;

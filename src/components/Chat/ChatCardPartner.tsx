@@ -3,10 +3,10 @@ import { formatDate } from "../../utils/dateFormatter";
 import Typography from "../Typography/Typography";
 import { AnimatePresence, motion } from "framer-motion";
 import EmojiPicker from "emoji-picker-react";
-import { IoClose } from "react-icons/io5";
 import React from "react"
 import axios from "axios";
 import { Socket } from "socket.io-client";
+import { IoClose } from "react-icons/io5";
 
 const ChatCardPartner = ({
     setIsTyping,
@@ -23,10 +23,10 @@ const ChatCardPartner = ({
     socket: Socket,
     id: string | undefined,
     setIsChatroomExist: Function,
-    user: { 
+    user: {
         nama: string,
         image_url: string
-     },
+    },
     messages: {
         id_chat?: number,
         text_message: string,
@@ -68,13 +68,14 @@ const ChatCardPartner = ({
         console.log(id)
         socket.on(`user:typing:${id}`, (data) => {
             // if(data.isPartner) {
-                setIsPartner(data.isPartner)
-                setIsTyping(true)
-                setTimeout(() => {
-                    setIsTyping(false)
-                }, 3000);
+            setIsPartner(data.isPartner)
+            setIsTyping(true)
+            setTimeout(() => {
+                setIsTyping(false)
+            }, 3000);
             // }
         })
+        
     }, [id, setIsTyping, socket])
 
     React.useEffect(() => {
@@ -84,11 +85,11 @@ const ChatCardPartner = ({
 
     return (
         <>
-            <div className="hover:shadow-xl transition duration-200 bg-white">
+            <div className=" transition duration-200 bg-white fixed bottom-20 right-10 z-50 shadow-xl">
                 <div className="bg-purple-600 text-white p-3 flex justify-center rounded-t-lg">
                     <Typography variant="body1">{user.nama}</Typography>
                 </div>
-                <div className="border max-h-[400px] min-h-[400px] overflow-auto" ref={lastMessageRef}>
+                <div className="border md:max-h-[400px] md:min-h-[400px] md:w-[400px] overflow-auto" ref={lastMessageRef}>
                     <div className="p-3 pb-16">
                         <div>
                             {
@@ -122,10 +123,10 @@ const ChatCardPartner = ({
                             {
                                 isTyping &&
                                 <motion.div
-                                initial={{ y: 0 }}
-                                animate={{ y: -20 }}
-                                transition={{ duration: 0.3, ease: 'easeInOut' }}
-                                className={`flex ${ !isPartner ? 'justify-start' : 'justify-end'} p-2 rounded-full`}>
+                                    initial={{ y: 0 }}
+                                    animate={{ y: -20 }}
+                                    transition={{ duration: 0.3, ease: 'easeInOut' }}
+                                    className={`flex ${!isPartner ? 'justify-start' : 'justify-end'} p-2 rounded-full`}>
                                     <div className="typing">
                                         <div className="dot"></div>
                                         <div className="dot"></div>
@@ -136,8 +137,8 @@ const ChatCardPartner = ({
                         </div>
                         <form onSubmit={handleSubmit} className="text-section absolute bottom-0 right-0 left-0 flex items-center bg-white p-3 border">
                             <Input required value={message} placeholder="enter text here" className="w-full mr-2" onChange={e => setMessage(e.target.value)}
-                            onKeyDown={() => {
-                                socket.emit(`user:typing`, { isTyping: true, id: id, isPartner: true })
+                                onKeyDown={() => {
+                                    socket.emit(`user:typing`, { isTyping: true, id: id, isPartner: true })
                                 }}
                             />
                             <Button onClick={() => setEmojiVisible(!emojiVisible)} className="mb-0 bg-purple-600 border-none hover:bg-purple-500" type="button">😁</Button>
@@ -160,10 +161,10 @@ const ChatCardPartner = ({
                         </AnimatePresence>
                     </div>
                 </div>
+                <Button onClick={() => { setIsChatroomExist(false) }} className='fixed right-0 rounded-full p-3 h-fit min-h-fit' color="primary">
+                    <IoClose size='30px' />
+                </Button>
             </div>
-            <Button onClick={() => { setIsChatroomExist(false) }} className='absolute right-0 mt-5 rounded-full p-3 h-fit min-h-fit' color="primary">
-                <IoClose size='30px' />
-            </Button>
         </>
     );
 }

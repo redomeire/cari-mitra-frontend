@@ -24,7 +24,8 @@ const PengajuanDetail = ({ socket }: { socket: Socket }) => {
             jenis_acara: "Dies natalis" | "seminar" | "lomba",
             nama: string,
             created_at: Date,
-            nama_acara: string
+            nama_acara: string,
+            status: string
         }>(
             {
                 deskripsi_acara: '',
@@ -36,7 +37,8 @@ const PengajuanDetail = ({ socket }: { socket: Socket }) => {
                 jenis_acara: "Dies natalis",
                 nama: '',
                 created_at: new Date(),
-                nama_acara: ''
+                nama_acara: '',
+                status: ''
             });
 
     const [messages, setMessages] = React.useState<{
@@ -106,7 +108,7 @@ const PengajuanDetail = ({ socket }: { socket: Socket }) => {
                             position="right"
                             message="Sabar... transaksimu lagi diproses" className="disabled:bg-purple-700 disabled:text-white">
                             <Button>
-                                <Typography variant="paragraph">berlangsung</Typography>
+                                <Typography variant="paragraph">{data.status}</Typography>
                                 </Button>
                         </Tooltip>
                     </div>

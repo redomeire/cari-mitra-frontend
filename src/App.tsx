@@ -19,12 +19,11 @@ import Profile from "./pages/user/Profile";
 import ProgressStep from "./pages/user/PartnershipProcess/ProgressStep";
 import Riwayat from "./pages/user/Riwayat";
 import PengajuanDetail from "./pages/user/Pengajuan/PengajuanDetail";
-import PengajuanDetailPartner from "./pages/admin/PengajuanDetail"
-import Pengajuans from "./pages/admin/Pengajuans";
+import Pengajuans from "./pages/partner/Pengajuans";
 
 // socket
 import io from "socket.io-client";
-import Partnership from "./pages/partner/Partnership";
+import Partnership from "./pages/partner/PengajuanDetail";
 
 // change host when deploying to production
 const host = 'http://localhost:3333';
@@ -56,7 +55,6 @@ function App() {
           <Route path="/partner/dashboard" element={<Dashboard/>}/>
           <Route path="/partner/partnership/:id" element={<Partnership socket={socket}/>}/>
           <Route path="/partner/pengajuans" element={<Pengajuans/>}/>
-          <Route path="/partner/pengajuan/:id" element={<PengajuanDetailPartner />}/>
           <Route path="/partner/user/:id" element={<UserDetail/>}/>
         </Route>
       </Routes>

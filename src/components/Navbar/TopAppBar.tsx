@@ -49,7 +49,7 @@ const TopAppBar = ({ isSidebarOpen, setIsSidebarOpen }: Props) => {
             <div className='w-[20%] flex justify-end items-center'>
                 <IoMdNotifications size={25} className="mr-5" />
                 <div className='relative'>
-                    <Avatar onClick={() => setIsVisible(!isVisible)} className="cursor-pointer" size={'sm'} shape="circle" src={userData.image_url} />
+                    <Avatar online onClick={() => setIsVisible(!isVisible)} className="cursor-pointer" size={'sm'} shape="circle" src={userData.image_url} />
                     {
                         isVisible &&
                         <Menu className='absolute bg-white p-5 right-0 min-w-[300px] shadow-lg rounded-box'>

@@ -144,7 +144,6 @@ const Dashboard = () => {
                     <Stats.Stat.Item variant="figure" className=" text-secondary">
                         <Avatar
                             size="sm"
-                            online={true}
                             src={userData.image_url}
                             shape="circle"
                         ></Avatar>
