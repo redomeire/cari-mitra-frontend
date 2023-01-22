@@ -1,12 +1,12 @@
 import React from "react";
-import { Button, ChatBubble, Input } from "react-daisyui";
+import { Button, Input } from "react-daisyui";
 import { IoClose } from "react-icons/io5";
-import { formatDate } from "../../utils/dateFormatter";
 import Typography from "../Typography/Typography";
 import { AnimatePresence, motion } from "framer-motion";
 import axios from "axios";
 import EmojiPicker from "emoji-picker-react";
 import { Socket } from "socket.io-client";
+import Chatbubble from "./Chatbubble";
 
 const ChatCard = ({
     setIsTyping,
@@ -27,6 +27,7 @@ const ChatCard = ({
         image_url: string
     },
     messages: {
+        id: number,
         id_chat?: number,
         text_message: string,
         sent_by_partner: boolean,
@@ -68,13 +69,14 @@ const ChatCard = ({
         socket.on(`user:typing:${id}`, (data) => {
             console.log(id)
             // if(data.isPartner) {
-                setIsPartner(data.isPartner)
-                setIsTyping(true)
-                setTimeout(() => {
-                    setIsTyping(false)
-                }, 3000);
+            setIsPartner(data.isPartner)
+            setIsTyping(true)
+            setTimeout(() => {
+                setIsTyping(false)
+            }, 3000);
             // }
         })
+
     }, [id, setIsTyping, socket])
 
     React.useEffect(() => {
@@ -95,21 +97,13 @@ const ChatCard = ({
                                 messages.length > 0 ?
                                     messages.map((item, index) => {
                                         return (
-                                            <motion.div
-                                                key={index}
-                                                initial={{ y: 50, opacity: 0 }}
-                                                animate={{ y: 0, opacity: 1 }}
-                                                transition={{ duration: 0.5, ease: 'easeInOut' }}
-                                                className='my-2'
-                                            >
-                                                <ChatBubble end={item.sent_by_partner ? false : true} key={index}>
-                                                    <ChatBubble.Avatar src={item.sent_by_partner ? partner.image_url : 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1780&q=80'} />
-                                                    <ChatBubble.Message color="primary">{item.text_message}</ChatBubble.Message>
-                                                    <ChatBubble.Footer>
-                                                        <ChatBubble.Time className="text-gray-900 opacity-70">{formatDate(item.created_at)}</ChatBubble.Time>
-                                                    </ChatBubble.Footer>
-                                                </ChatBubble>
-                                            </motion.div>
+                                            <Chatbubble
+                                            item={item}
+                                            partner={partner}
+                                            setMessages={setMessages}
+                                            socket={socket}
+                                            key={index}
+                                            />
                                         )
                                     })
                                     :
@@ -122,10 +116,10 @@ const ChatCard = ({
                             {
                                 isTyping &&
                                 <motion.div
-                                initial={{ y: 0 }}
-                                animate={{ y: -20 }}
-                                transition={{ duration: 0.3, ease: 'easeInOut' }}
-                                className={`flex ${ isPartner ? 'justify-start' : 'justify-end'} p-2 rounded-full`}>
+                                    initial={{ y: 0 }}
+                                    animate={{ y: -20 }}
+                                    transition={{ duration: 0.3, ease: 'easeInOut' }}
+                                    className={`flex ${isPartner ? 'justify-start' : 'justify-end'} p-2 rounded-full`}>
                                     <div className="typing">
                                         <div className="dot"></div>
                                         <div className="dot"></div>
@@ -139,7 +133,7 @@ const ChatCard = ({
                                 setMessage(e.target.value)
                             }}
                                 onKeyDown={() => {
-                                socket.emit(`user:typing`, { isTyping: true, id: id, isPartner: false })
+                                    socket.emit(`user:typing`, { isTyping: true, id: id, isPartner: false })
                                 }}
                             />
                             <Button onClick={() => setEmojiVisible(!emojiVisible)} className="mb-0 bg-purple-600 border-none hover:bg-purple-500" type="button">😁</Button>

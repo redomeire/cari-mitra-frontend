@@ -1,6 +1,6 @@
 import AppLayout from "../../../components/layout/AppLayout";
 import { Socket } from "socket.io-client";
-import { Button, Collapse, Tooltip } from "react-daisyui";
+import { Badge, Button, Collapse, Tooltip } from "react-daisyui";
 import Typography from "../../../components/Typography/Typography";
 
 import React from "react";
@@ -25,7 +25,8 @@ const PengajuanDetail = ({ socket }: { socket: Socket }) => {
             nama: string,
             created_at: Date,
             nama_acara: string,
-            status: string
+            status: string,
+            updated_at: Date
         }>(
             {
                 deskripsi_acara: '',
@@ -37,11 +38,13 @@ const PengajuanDetail = ({ socket }: { socket: Socket }) => {
                 jenis_acara: "Dies natalis",
                 nama: '',
                 created_at: new Date(),
+                updated_at: new Date(),
                 nama_acara: '',
                 status: ''
             });
 
     const [messages, setMessages] = React.useState<{
+        id: number,
         id_chat?: number,
         text_message: string,
         sent_by_partner: boolean,
@@ -72,12 +75,6 @@ const PengajuanDetail = ({ socket }: { socket: Socket }) => {
             console.log('chat room created : ' + data)
         })
         socket.on(`client:chat:${data.id_chat}`, (data) => setMessages((prev) => [...prev, data]))
-
-        // return () => {
-        //     socket.off(`user:typing:${data.id_chat}`, () => {
-        //         setIsTyping(false)
-        //     })
-        // }
     }, [socket, id, data.id_chat])
 
     const createChatroom = () => {
@@ -102,14 +99,22 @@ const PengajuanDetail = ({ socket }: { socket: Socket }) => {
         <AppLayout>
             <div className="px-10 flex items-start justify-between w-full pt-10">
                 <div className="p-5 border rounded-lg md:w-[63%]">
-                    <Typography className="text-[30px] font-semibold">{data.nama_acara}</Typography>
+                    <Typography className="text-[30px] font-semibold">{data?.nama_acara}</Typography>
+                        <Typography variant="paragraph" className="text-gray-600">terakhir diupdate {formatDate(data?.updated_at)}</Typography>
                     <div className="my-5">
                         <Tooltip
                             position="right"
-                            message="Sabar... transaksimu lagi diproses" className="disabled:bg-purple-700 disabled:text-white">
-                            <Button>
+                            message="Sabar... transaksimu lagi diproses" className="disabled:bg-purple-700 disabled:text-white cursor-pointer">
+                                <Badge color={
+                                    data.status === "berhasil" ? 'info'
+                                    : data.status === "berlangsung" ? 'primary'
+                                        : data.status === "selesai" ? 'success'
+                                            : data.status === "gagal" ? 'error'
+                                                : 'primary'
+                                } variant="outline">{data.status}</Badge>
+                            {/* <Button>
                                 <Typography variant="paragraph">{data.status}</Typography>
-                                </Button>
+                                </Button> */}
                         </Tooltip>
                     </div>
                     <div>

@@ -49,7 +49,7 @@ const Riwayat = () => {
                             nama: string,
                             image_url: string,
                             created_at: Date,
-                            status: 'berlangsung' | 'gagal'
+                            status: 'berlangsung' | 'gagal' | 'berhasil' | 'selesai'
                         }, index) => {
                             return(
                                 <a href={`/user/pengajuan/${item.id}/details`} key={index} className="p-4 rounded-lg border my-3 flex items-start">
@@ -92,6 +92,12 @@ const FilterBar = ({ filterRiwayat, setFilterRiwayat }: {
                 </div>
                 <div onClick={() => setFilterRiwayat('berlangsung')} className={`cursor-pointer flex items-center p-3 my-3 ${filterRiwayat === 'berlangsung' ? 'border-l-2 border-l-black' : ''}`}>
                     <Typography className="font-[500] text-sm uppercase">Berlangsung</Typography>
+                </div>
+                <div onClick={() => setFilterRiwayat('berhasil')} className={`cursor-pointer flex items-center p-3 my-3 ${filterRiwayat === 'berhasil' ? 'border-l-2 border-l-black' : ''}`}>
+                    <Typography className="font-[500] text-sm uppercase">Berhasil</Typography>
+                </div>
+                <div onClick={() => setFilterRiwayat('selesai')} className={`cursor-pointer flex items-center p-3 my-3 ${filterRiwayat === 'selesai' ? 'border-l-2 border-l-black' : ''}`}>
+                    <Typography className="font-[500] text-sm uppercase">Selesai</Typography>
                 </div>
                 <div onClick={() => setFilterRiwayat('gagal')}  className={`cursor-pointer flex items-center p-3 my-3 ${filterRiwayat === 'gagal' ? 'border-l-2 border-l-black' : ''}`}>
                     <Typography className="font-[500] text-sm uppercase">Gagal</Typography>
