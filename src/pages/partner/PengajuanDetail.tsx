@@ -74,7 +74,7 @@ const Partnership = ({ socket }: { socket: Socket }) => {
         console.log(`token: ${userData.id}`)
 
         axios.put('http://localhost:3333/api/pengajuan/update', {
-            id: data.id_chat,
+            id: id,
             status: status
         }, {
             headers: {
