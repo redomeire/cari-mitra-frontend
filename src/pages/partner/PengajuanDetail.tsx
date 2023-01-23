@@ -20,6 +20,7 @@ const Partnership = ({ socket }: { socket: Socket }) => {
     const [status, setStatus] = React.useState('');
     const [newMessageExist, setNewMessageExist] = React.useState(false);
     const [messages, setMessages] = React.useState<{
+        id: number,
         id_chat?: number,
         text_message: string,
         sent_by_partner: boolean,

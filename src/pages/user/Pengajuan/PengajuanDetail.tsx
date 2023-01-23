@@ -97,7 +97,7 @@ const PengajuanDetail = ({ socket }: { socket: Socket }) => {
 
     return (
         <AppLayout>
-            <div className="px-10 flex items-start justify-between w-full pt-10">
+            <div className="px-10 flex md:flex-row flex-col items-start justify-between w-full pt-10">
                 <div className="p-5 border rounded-lg md:w-[63%]">
                     <Typography className="text-[30px] font-semibold">{data?.nama_acara}</Typography>
                         <Typography variant="paragraph" className="text-gray-600">terakhir diupdate {formatDate(data?.updated_at)}</Typography>

@@ -1,5 +1,4 @@
-import { Button, ChatBubble, Input } from "react-daisyui";
-import { formatDate } from "../../utils/dateFormatter";
+import { Button, Input } from "react-daisyui";
 import Typography from "../Typography/Typography";
 import { AnimatePresence, motion } from "framer-motion";
 import EmojiPicker from "emoji-picker-react";
@@ -7,6 +6,7 @@ import React from "react"
 import axios from "axios";
 import { Socket } from "socket.io-client";
 import { IoClose } from "react-icons/io5";
+import Chatbubble from "./Chatbubble";
 
 const ChatCardPartner = ({
     setIsTyping,
@@ -28,6 +28,7 @@ const ChatCardPartner = ({
         image_url: string
     },
     messages: {
+        id: number,
         id_chat?: number,
         text_message: string,
         sent_by_partner: boolean,
@@ -65,22 +66,17 @@ const ChatCardPartner = ({
     }
 
     React.useEffect(() => {
-        console.log(id)
         socket.on(`user:typing:${id}`, (data) => {
-            // if(data.isPartner) {
             setIsPartner(data.isPartner)
             setIsTyping(true)
             setTimeout(() => {
                 setIsTyping(false)
             }, 3000);
-            // }
         })
-        
     }, [id, setIsTyping, socket])
 
     React.useEffect(() => {
         lastMessageRef.current.scrollTop = lastMessageRef.current.scrollHeight
-        // console.log(lastMessageRef)
     }, [messages, isTyping])
 
     return (
@@ -96,21 +92,14 @@ const ChatCardPartner = ({
                                 messages.length > 0 ?
                                     messages.map((item, index) => {
                                         return (
-                                            <motion.div
+                                            <Chatbubble
+                                                isPartner
+                                                item={item}
+                                                partner={user}
+                                                setMessages={setMessages}
+                                                socket={socket}
                                                 key={index}
-                                                initial={{ y: 50, opacity: 0 }}
-                                                animate={{ y: 0, opacity: 1 }}
-                                                transition={{ duration: 0.5, ease: 'easeInOut' }}
-                                                className='my-2'
-                                            >
-                                                <ChatBubble end={item.sent_by_partner ? true : false} key={index}>
-                                                    <ChatBubble.Avatar src={item.sent_by_partner ? userData.image_url : 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1780&q=80'} />
-                                                    <ChatBubble.Message color="primary">{item.text_message}</ChatBubble.Message>
-                                                    <ChatBubble.Footer>
-                                                        <ChatBubble.Time className="text-gray-900 opacity-70">{formatDate(item.created_at)}</ChatBubble.Time>
-                                                    </ChatBubble.Footer>
-                                                </ChatBubble>
-                                            </motion.div>
+                                            />
                                         )
                                     })
                                     :

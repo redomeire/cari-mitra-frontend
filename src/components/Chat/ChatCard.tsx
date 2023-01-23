@@ -98,6 +98,7 @@ const ChatCard = ({
                                     messages.map((item, index) => {
                                         return (
                                             <Chatbubble
+                                            isPartner={false}
                                             item={item}
                                             partner={partner}
                                             setMessages={setMessages}
