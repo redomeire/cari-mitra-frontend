@@ -114,7 +114,7 @@ const Partnership = ({ socket }: { socket: Socket }) => {
                             <tbody>
                                 <tr>
                                     <td className="text-gray-400 font-semibold">ID Pengajuan</td>
-                                    <td>{data.id_chat}</td>
+                                    <td>{data.id_pengajuan}</td>
                                 </tr>
                                 <tr>
                                     <td className="text-gray-400 font-semibold">Nama Pengaju</td>
